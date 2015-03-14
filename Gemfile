@@ -17,6 +17,7 @@ gem "sorcery"
 
 gem 'thin'
 
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_21]
@@ -26,6 +27,9 @@ group :development do
 end
 
 group :development, :test do
+  gem 'database_cleaner'
+  gem 'factory_girl'
+  gem 'faker'
   gem 'pry-rails'
   gem 'pry-rescue'
   gem 'byebug'

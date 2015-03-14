@@ -1,0 +1,4 @@
+class PartyRow < EventGroup
+
+end
+

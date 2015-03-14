@@ -1,0 +1,5 @@
+class Festival < EventGroup
+
+end
+
+
