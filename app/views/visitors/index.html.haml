@@ -1,3 +1,7 @@
 - if current_user
   %p Hi #{current_user.email}
 = link_to 'Login with Facebook', auth_at_provider_path(:provider => :facebook)
+
+%ul
+  - Dance.tree.children.each do |dance|
+    = render partial: 'dances', locals: { dance: dance }

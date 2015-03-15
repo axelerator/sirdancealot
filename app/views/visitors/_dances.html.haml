@@ -1,0 +1,6 @@
+%li
+  = dance.name
+  - if dance.children.any?
+    %ul
+      - dance.children.each do |child|
+        = render partial: 'dances', locals: { dance: child }
