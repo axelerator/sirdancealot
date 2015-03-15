@@ -1,0 +1,5 @@
+%table
+  - @schools.each do |school|
+    %tr
+      %td= link_to school.name, user_school_path(school)
+= link_to " H18N Neue Schule", new_user_school_path

@@ -1,7 +1,7 @@
 class CreateEventGroup < ActiveRecord::Migration
   def change
     create_table :event_groups, id: :uuid do |t|
-      t.string :type
+      t.string :type, index: true
       t.string :name
     end
 

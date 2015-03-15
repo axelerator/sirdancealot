@@ -6,4 +6,18 @@ class User < ActiveRecord::Base
   has_many :authentications, :dependent => :destroy
   accepts_nested_attributes_for :authentications
 
+  has_many :relationships, inverse_of: :user
+
+  def ownerships
+    relationships.ownerships
+  end
+
+  def owned_schools
+    ownerships
+      .joins(:institution)
+      .where('institutions.type = ?', School.name)
+      .map(&:owns)
+  end
+
 end
+

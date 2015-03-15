@@ -36,13 +36,3 @@
   @extend .button;
   @extend .radius;
   }
-// apply styles to HTML elements
-// to make views framework-neutral
-main {
-  @include twelve-columns;
-  background-color: #eee;
-  }
-section {
-  @extend .row;
-  margin-top: 20px;
-  }

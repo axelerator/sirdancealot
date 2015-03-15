@@ -1,0 +1,6 @@
+- url = @school.persisted? ? user_school_path(@school) : user_schools_path
+- method = @school.persisted? ? :patch : :post
+= simple_form_for @school, url: url, method: method do |f|
+  = f.input :name
+  = f.button :submit
+

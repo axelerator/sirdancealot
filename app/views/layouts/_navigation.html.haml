@@ -1,12 +1,26 @@
--# navigation styled for Zurb Foundation 5
--# the syntax for data-topbar may need to change for Zurb Foundation 5
-%nav.top-bar{"data-topbar" => true}
+%nav.top-bar{"data-topbar" => "", :role => "navigation"}
   %ul.title-area
     %li.name
-      = link_to 'Home', root_path
+      %h1
+        %a{:href => "#"} I dance a lot
+    / Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone
     %li.toggle-topbar.menu-icon
       %a{:href => "#"}
-        Menu
-  .top-bar-section
-    %ul
-      = render 'layouts/navigation_links'
+        %span Menu
+  %section.top-bar-section
+    / Right Nav Section
+    %ul.right
+      -#%li.active
+        %a{:href => "#"} Right Button Active
+      - if current_user
+        %li.has-dropdown
+          %a{:href => "#"}= current_user.email
+          %ul.dropdown
+            %li
+              =link_to t('H18N ICH'), user_path
+            %li.active
+              %a{:href => "#"}=t('global.logout')
+    / Left Nav Section
+    %ul.left
+      %li
+        = render 'layouts/navigation_links'

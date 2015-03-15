@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150314221316) do
+ActiveRecord::Schema.define(version: 20150314235218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 20150314221316) do
     t.string "name"
   end
 
+  add_index "event_groups", ["type"], name: "index_event_groups_on_type", using: :btree
+
   create_table "events", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "type"
     t.datetime "starts_at"
@@ -64,6 +66,14 @@ ActiveRecord::Schema.define(version: 20150314221316) do
   end
 
   add_index "events", ["place_id"], name: "index_events_on_place_id", using: :btree
+  add_index "events", ["type"], name: "index_events_on_type", using: :btree
+
+  create_table "institutions", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string "type", null: false
+    t.string "name", null: false
+  end
+
+  add_index "institutions", ["type"], name: "index_institutions_on_type", using: :btree
 
   create_table "places", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string "type"
@@ -73,23 +83,28 @@ ActiveRecord::Schema.define(version: 20150314221316) do
   end
 
   add_index "places", ["place_id"], name: "index_places_on_place_id", using: :btree
+  add_index "places", ["type"], name: "index_places_on_type", using: :btree
 
-  create_table "relation_ships", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "relationships", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string "type"
     t.uuid   "user_id",        null: false
     t.uuid   "event_id"
     t.uuid   "event_group_id"
+    t.uuid   "institution_id"
   end
 
-  add_index "relation_ships", ["event_group_id"], name: "index_relation_ships_on_event_group_id", using: :btree
-  add_index "relation_ships", ["event_id"], name: "index_relation_ships_on_event_id", using: :btree
-  add_index "relation_ships", ["user_id"], name: "index_relation_ships_on_user_id", using: :btree
+  add_index "relationships", ["event_group_id"], name: "index_relationships_on_event_group_id", using: :btree
+  add_index "relationships", ["event_id"], name: "index_relationships_on_event_id", using: :btree
+  add_index "relationships", ["institution_id"], name: "index_relationships_on_institution_id", using: :btree
+  add_index "relationships", ["type"], name: "index_relationships_on_type", using: :btree
+  add_index "relationships", ["user_id"], name: "index_relationships_on_user_id", using: :btree
 
   create_table "roles", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string "type"
     t.uuid   "user_id", null: false
   end
 
+  add_index "roles", ["type"], name: "index_roles_on_type", using: :btree
   add_index "roles", ["user_id"], name: "index_roles_on_user_id", using: :btree
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|

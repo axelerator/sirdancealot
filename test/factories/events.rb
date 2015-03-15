@@ -74,4 +74,14 @@ FactoryGirl.define do
     end
   end
 
+  sequence :school_name do |i|
+    "#{Faker::Name.first_name}'s dance company"
+  end
+
+  factory :institution do
+    factory :school, class: School do
+      name { generate(:school_name) }
+    end
+  end
+
 end
