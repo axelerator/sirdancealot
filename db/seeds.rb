@@ -51,8 +51,8 @@ DatabaseCleaner.clean_with :truncation
   create_dances(sub_grenres, parent)
 end
 
-rene = FactoryGirl.create(:user, email: 'René@example.org', password: '1qay2wsx')
-martina = FactoryGirl.create(:user, email: 'Martina@example.org', password: '1qay2wsx')
+rene = FactoryGirl.create(:user, email: 'rene@example.org', password: '1qay2wsx')
+martina = FactoryGirl.create(:user, email: 'martina@example.org', password: '1qay2wsx')
 
 rene.create_school(name: 'SalsaHH')
 

@@ -4,6 +4,11 @@ Rails.application.routes.draw do
   get "oauth/callback" => "oauths#callback" # for use with Github, Facebook
   get "oauth/:provider" => "oauths#oauth", :as => :auth_at_provider
 
+  resources :user_sessions, only: [:new, :destroy, :create]
+
+  get 'login' => 'user_sessions#new', :as => :login
+  post 'logout' => 'user_sessions#destroy', :as => :logout
+
   resource :user do
     resources :schools, controller: 'users/schools' do
       resources :courses, controller: 'users/schools/courses' do
