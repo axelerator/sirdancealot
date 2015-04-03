@@ -1,6 +1,14 @@
 - if current_user
   %p Hi #{current_user.email}
-= link_to 'Login with Facebook', auth_at_provider_path(:provider => :facebook)
+
+  - if current_user.owned_schools.any?
+    - current_user.owned_schools.each do |school|
+      = owned_item_link(school)
+      %br
+- else
+  = link_to 'Login with Facebook', auth_at_provider_path(:provider => :facebook)
+  = link_to 'H18N login wiht PW', login_path
+
 
 -#%ul
   - Dance.tree.children.each do |dance|
