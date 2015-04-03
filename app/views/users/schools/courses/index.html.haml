@@ -1,0 +1,7 @@
+%h1=@school.name
+
+- @courses.each do |course|
+  %p= link_to course.name, edit_user_school_course_path(course)
+
+= link_to t('.new'), new_user_school_course_path
+

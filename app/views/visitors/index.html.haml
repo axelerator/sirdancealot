@@ -2,6 +2,9 @@
   %p Hi #{current_user.email}
 = link_to 'Login with Facebook', auth_at_provider_path(:provider => :facebook)
 
-%ul
+-#%ul
   - Dance.tree.children.each do |dance|
     = render partial: 'dances', locals: { dance: dance }
+-#= carendar(@calendar, class: 'school-calendar month') do |item|
+  .title= item[:title]
+

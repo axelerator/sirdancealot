@@ -32,6 +32,7 @@ FactoryGirl.define do
   end
 
   factory :event_group do
+    starts_at Time.now + 1.week
     factory :course, class: Course do
       name { generate(:course_name) }
       after(:create) do |course, evaluator|

@@ -11,12 +11,17 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'foundation-rails'
+gem 'foundation-datetimepicker-rails'
 gem 'haml-rails'
 gem 'simple_form'
+gem "select2-rails"
 gem "sorcery"
+gem 'rails-i18n', '~> 4.0.0'
 
 gem 'thin'
 
+gem 'ice_cube'
+gem 'carendar', path: '../carendar'
 
 group :development do
   gem 'better_errors'

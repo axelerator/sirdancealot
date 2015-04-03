@@ -19,5 +19,18 @@ class User < ActiveRecord::Base
       .map(&:owns)
   end
 
+  def owned_courses
+    ownerships
+      .joins(:event_group)
+      .where('event_groups.type = ?', Course.name)
+      .map(&:owns)
+  end
+
+  def create_school(params)
+    school = School.new(params)
+    school.add_owner!(self) if school.save
+    school
+  end
+
 end
 

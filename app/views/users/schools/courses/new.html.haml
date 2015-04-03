@@ -1,0 +1,56 @@
+= simple_form_for @course, url: user_school_courses_path, method: :post do |f|
+  .row
+    .columns.large-6
+      = f.input :name
+      = f.input :dances, collection: Dance.all, input_html: {'data-behaviour' => 'select2', style: 'width: 100%', multiple: true}
+      .row
+        .columns.large-6
+          = f.input :start_time, as: :string
+        .columns.large-6
+          = f.input :duration, as: :integer
+    .columns.large-6
+      %h2 H18N Datum
+      = f.input :start_date, as: :string
+      = f.input :schedule_rule, as: :hidden
+      %h3 H18N Wiederholung
+      %ul.tabs{"data-tab" => ""}
+        %li.tab-title.active
+          %a{:href => "#no-recurr", onclick: '$("#course_schedule_rule").val("none")'} Keine
+        %li.tab-title
+          %a{:href => "#weekly-recurr", onclick: '$("#course_schedule_rule").val("weekly")'} Wöchentlich
+        %li.tab-title
+          %a{:href => "#monthly-recurr", onclick: '$("#course_schedule_rule").val("monthly")'} Monatlich
+      .tabs-content
+        #no-recurr.content.active
+          %p H18N Der Termin findet einmalig statt
+        #weekly-recurr.content
+          = f.input :schedule_rule_weekly_interval, collection: (1..29).to_a
+          .input
+            - ((1..6).to_a + [0]).each do |day_index|
+              - active = false #schedule_weekly_index_checked(tour_interval, day_index)
+              = check_box_tag "course[schedule_rule_weekly][]"
+              %label= I18n.t("date.abbr_day_names")[day_index]
+        #monthly-recurr.content
+          .repetition
+            .rule_option.radio
+              %label.choice
+                = f.radio_button :schedule_rule_monthly_mode, "day_of_month"
+                = t(".day_of_month", {day: @course.starts_at.day})
+            -#.rule_option.radio
+              %label.choice
+                = f.radio_button :schedule_rule_monthly_mode, "day_of_month_reverse"
+                = t(".day_of_month_reverse", {count: @course.starts_at.end_of_month.day - @course.starts_at.day + 1})
+            .rule_option.radio
+              %label.choice
+                = f.radio_button :schedule_rule_monthly_mode, "weekday"
+                = t(".weekday", {day: ((@course.starts_at.day - 1) / 7).to_i + 1, weekday: I18n.t("date.abbr_day_names")[@course.starts_at.wday]})
+            -#.rule_option.radio
+              %label.choice
+                = f.radio_button :schedule_rule_monthly_mode, "weekday_reverse"
+                = t(".weekday_reverse", {count: ((@course.starts_at.end_of_month.day - @course.starts_at.day) / 7).to_i + 1, weekday: I18n.t("date.abbr_day_names")[@course.starts_at.wday]})
+          .months
+            - (1..12).each do |month_index|
+              = check_box_tag "course[schedule_rule_monthly][]", {id: "monthly#{month_index}"}, month_index
+              %label{for: "monthly#{month_index}"}= I18n.t("date.abbr_month_names")[month_index]
+  .row
+    = f.button :submit

@@ -1,3 +1,8 @@
+PATH
+  remote: ../carendar
+  specs:
+    carendar (0.0.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -69,6 +74,7 @@ GEM
       i18n (~> 0.5)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    foundation-datetimepicker-rails (0.1.3)
     foundation-rails (5.5.1.0)
       railties (>= 3.1.0)
       sass (>= 3.3.0, < 3.5)
@@ -89,6 +95,7 @@ GEM
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
     i18n (0.7.0)
+    ice_cube (0.12.1)
     interception (0.5)
     jbuilder (2.2.11)
       activesupport (>= 3.0.0, < 5)
@@ -153,6 +160,9 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
+    rails-i18n (4.0.3)
+      i18n (~> 0.6)
+      railties (~> 4.0)
     rails_layout (1.0.25)
     railties (4.2.0)
       actionpack (= 4.2.0)
@@ -170,6 +180,8 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    select2-rails (3.5.9.1)
+      thor (~> 0.14)
     sexp_processor (4.5.0)
     simple_form (3.1.0)
       actionpack (~> 4.0)
@@ -216,13 +228,16 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   byebug
+  carendar!
   coffee-rails (~> 4.1.0)
   database_cleaner
   factory_girl
   faker
+  foundation-datetimepicker-rails
   foundation-rails
   haml-rails
   html2haml
+  ice_cube
   jbuilder (~> 2.0)
   jquery-rails
   pg
@@ -230,8 +245,10 @@ DEPENDENCIES
   pry-rescue
   quiet_assets
   rails (= 4.2.0)
+  rails-i18n (~> 4.0.0)
   rails_layout
   sass-rails (~> 5.0)
+  select2-rails
   simple_form
   sorcery
   spring

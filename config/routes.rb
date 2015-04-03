@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   resource :user do
     resources :schools, controller: 'users/schools' do
-      resources :courses do
+      resources :courses, controller: 'users/schools/courses' do
 
       end
     end

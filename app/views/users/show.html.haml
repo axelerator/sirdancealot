@@ -5,5 +5,4 @@
   %h2=klass.name.pluralize
   - items.each do |item|
     .ownership
-      %h3=item.name
-      %p= item.id
+      = owned_item_link(item)

@@ -15,9 +15,8 @@ class Users::SchoolsController < ApplicationController
 
   def create
     School.transaction do
-      @school = School.new(school_params)
-      if @school.save
-        @school.add_owner!(current_user)
+      @school = current_user.create_school(school_params)
+      if @school.errors.any?
         redirect_to user_school_path(@school)
       else
         render :new

@@ -51,20 +51,24 @@ ActiveRecord::Schema.define(version: 20150314235218) do
   add_index "dances_events", ["event_id"], name: "index_dances_events_on_event_id", using: :btree
 
   create_table "event_groups", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string "type"
-    t.string "name"
+    t.string   "type"
+    t.string   "name"
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at"
+    t.text     "schedule"
   end
 
   add_index "event_groups", ["type"], name: "index_event_groups_on_type", using: :btree
 
   create_table "events", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "type"
-    t.datetime "starts_at"
-    t.datetime "ends_at"
+    t.datetime "starts_at",      null: false
+    t.datetime "ends_at",        null: false
     t.uuid     "place_id",       null: false
     t.uuid     "event_group_id", null: false
   end
 
+  add_index "events", ["event_group_id"], name: "index_events_on_event_group_id", using: :btree
   add_index "events", ["place_id"], name: "index_events_on_place_id", using: :btree
   add_index "events", ["type"], name: "index_events_on_type", using: :btree
 
@@ -78,24 +82,27 @@ ActiveRecord::Schema.define(version: 20150314235218) do
   create_table "places", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string "type"
     t.string "name"
-    t.uuid   "place_id"
     t.string "description"
   end
 
-  add_index "places", ["place_id"], name: "index_places_on_place_id", using: :btree
   add_index "places", ["type"], name: "index_places_on_type", using: :btree
 
   create_table "relationships", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string "type"
-    t.uuid   "user_id",        null: false
-    t.uuid   "event_id"
-    t.uuid   "event_group_id"
-    t.uuid   "institution_id"
+    t.string  "type"
+    t.uuid    "user_id"
+    t.uuid    "event_id"
+    t.uuid    "place_id"
+    t.uuid    "event_group_id"
+    t.uuid    "institution_id"
+    t.uuid    "hosted_by_institution_id"
+    t.integer "state"
   end
 
   add_index "relationships", ["event_group_id"], name: "index_relationships_on_event_group_id", using: :btree
   add_index "relationships", ["event_id"], name: "index_relationships_on_event_id", using: :btree
+  add_index "relationships", ["hosted_by_institution_id"], name: "index_relationships_on_hosted_by_institution_id", using: :btree
   add_index "relationships", ["institution_id"], name: "index_relationships_on_institution_id", using: :btree
+  add_index "relationships", ["place_id"], name: "index_relationships_on_place_id", using: :btree
   add_index "relationships", ["type"], name: "index_relationships_on_type", using: :btree
   add_index "relationships", ["user_id"], name: "index_relationships_on_user_id", using: :btree
 
@@ -120,4 +127,12 @@ ActiveRecord::Schema.define(version: 20150314235218) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
 
+  add_foreign_key "events", "event_groups"
+  add_foreign_key "events", "places"
+  add_foreign_key "relationships", "event_groups"
+  add_foreign_key "relationships", "events"
+  add_foreign_key "relationships", "institutions"
+  add_foreign_key "relationships", "institutions", column: "hosted_by_institution_id"
+  add_foreign_key "relationships", "places"
+  add_foreign_key "relationships", "users"
 end

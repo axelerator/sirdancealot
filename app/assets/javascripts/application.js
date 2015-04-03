@@ -14,7 +14,14 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require foundation
+//= require select2
+//= require foundation-datetimepicker
 //= require_tree .
 $(function() {
   $(document).foundation();
+  $(document).on("page:load ready", function(){
+      $('input.fancy_datetime').fdatetimepicker({format: 'dd.mm.yy', weekStart: 1});
+      $('input.fancy_date').fdatetimepicker({format: 'dd.mm.yy', weekStart: 1});
+      $('select[data-behaviour=select2]').select2();
+  });
 });

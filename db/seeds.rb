@@ -6,6 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 #
+Dir["#{File.dirname(__FILE__)}/../test/factories/**/*.rb"].each { |f| require f }
 def create_dances(children, parent)
   case children
   when String
@@ -49,4 +50,9 @@ DatabaseCleaner.clean_with :truncation
   parent = Dance.create(name: top_genre)
   create_dances(sub_grenres, parent)
 end
+
+rene = FactoryGirl.create(:user, email: 'René@example.org', password: '1qay2wsx')
+martina = FactoryGirl.create(:user, email: 'Martina@example.org', password: '1qay2wsx')
+
+rene.create_school(name: 'SalsaHH')
 

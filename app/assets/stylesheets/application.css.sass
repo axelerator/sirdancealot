@@ -10,6 +10,41 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require select2
  *= require_tree .
  *= require_self
  */
+@import 'carendar'
+
+.school-calendar
+  +carendar(500px, 60px, 5)
+  .day
+    border-left: 1px solid #EEE
+    border-top: 1px solid #EEE
+
+    > div
+      background-color: #EEE
+      text-align: center
+      font-size: 10pt
+      color: #999
+
+  .item
+    border: 1px solid #DDD
+    background-color: #EEE
+    font-size: 8pt
+    z-index: 5
+    &:hover
+      z-index: 10
+
+    &.important
+      background-color: #FEE
+
+
+  &.month .day .items .item
+    &:hover
+      position: absolute
+      width: 100px
+      height: 30px
+      border-radius: 0
+      > .title
+        display: block
