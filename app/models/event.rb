@@ -7,6 +7,14 @@ class Event < ActiveRecord::Base
 
   def add_host!(institution)
     Relationships::HostedBy.create!(event: self, host: institution)
+    add_owners!(institution.owners)
+  end
+
+  def add_owners!(owner)
+    owners = Array.wrap(owner)
+    owners.each do |owner|
+      Relationships::OwnsEvent.create!(event: self, user: owner)
+    end
   end
 end
 

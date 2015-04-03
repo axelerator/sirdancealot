@@ -7,6 +7,11 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 #
 Dir["#{File.dirname(__FILE__)}/../test/factories/**/*.rb"].each { |f| require f }
+
+def assert(cond, msg = "FAIL")
+  raise msg unless cond
+end
+
 def create_dances(children, parent)
   case children
   when String
@@ -54,5 +59,30 @@ end
 rene = FactoryGirl.create(:user, email: 'rene@example.org', password: '1qay2wsx')
 martina = FactoryGirl.create(:user, email: 'martina@example.org', password: '1qay2wsx')
 
-rene.create_school(name: 'SalsaHH')
+salsahh = rene.create_school(name: 'SalsaHH')
+assert salsahh.persisted?
 
+friedensalle = salsahh.create_place(name: 'Großer Raum', description: 'Friedensalle 43')
+assert friedensalle.persisted?
+
+courses_src = [
+  {name: 'NY F2', start_time: '19:00', duration: '60', day: 1},
+  {name: 'NY F1', start_time: '20:00', duration: '60', day: 1},
+  {name: 'rueda', start_time: '20:00', duration: '60', day: 2}
+]
+
+courses = courses_src.map do |course_src|
+  course_params = {
+    "name"=> course_src[:name],
+    "start_time"=>"19:00",
+    "duration"=>"60",
+    #"start_date"=>"#{courese_src + 2}.04.15",
+    "schedule_rule_weekly_interval"=>"1",
+    "schedule_rule"=>"weekly",
+    "schedule_rule_weekly"=>["1"],
+    "starts_at"=>  DateTime.strptime("#{course_src[:day]}.3.15##{course_src[:start_time]}", "%d.%m.%y#%k:%M")
+  }
+  course = salsahh.create_course(course_params, friedensalle )
+  assert course.persisted?
+  course
+end

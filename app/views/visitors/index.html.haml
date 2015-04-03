@@ -8,6 +8,8 @@
 - else
   = link_to 'Login with Facebook', auth_at_provider_path(:provider => :facebook)
   = link_to 'H18N login wiht PW', login_path
+  %br
+  = link_to "login as REne", user_sessions_path(login: {email: 'rene@example.org', password: '1qay2wsx'}), method: :post
 
 
 -#%ul

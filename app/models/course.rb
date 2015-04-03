@@ -2,6 +2,9 @@ class Course < EventGroup
 
   def add_host!(institution)
     Relationships::CourseGivenBy.create!(event_group: self, host: institution)
+    institution.owners.each do |owner|
+      self.add_owner!(owner)
+    end
   end
 
   def school
