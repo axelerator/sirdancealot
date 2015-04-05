@@ -7,15 +7,14 @@ class Users::SchoolsController < ApplicationController
   end
 
   def show
-    cal_start = Time.now.beginning_of_week
-    cal_end   = Time.now.end_of_week
+    cal_start = Time.zone.now.beginning_of_week
+    cal_end   = Time.zone.now.end_of_week
     events = @school.hosted_events(cal_start, cal_end)
-    debugger
     item_hashes = events.map do |event|
       {
         starts_at: event.starts_at,
         ends_at: event.ends_at,
-        options: {title: event.event_group.name}
+        options: {title: event.event_group.name, event: event}
       }
     end
     @calendar = Carendar::Calendar.new(cal_start, cal_end, item_hashes)

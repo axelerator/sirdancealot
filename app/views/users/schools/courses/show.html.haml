@@ -1,5 +1,12 @@
-= @course.name
-= @course.id
-- @course.occurrences.each do |occurrence|
-  %p= l(occurrence)
+%ul.breadcrumbs
+  %li
+    = owned_item_link(@school)
+  %li.current
+    = owned_item_link(@course)
+%h1= @course.name
 
+.row
+  .columns.large-offset-1.large-8(style="border: 1px solid red")
+    = carendar @calendar, class: 'school-calendar month' do |event|
+      .title
+        = owned_item_link(event[:event])

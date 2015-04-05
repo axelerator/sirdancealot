@@ -51,11 +51,13 @@ ActiveRecord::Schema.define(version: 20150314235218) do
   add_index "dances_events", ["event_id"], name: "index_dances_events_on_event_id", using: :btree
 
   create_table "event_groups", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "type"
-    t.string   "name"
-    t.datetime "starts_at", null: false
-    t.datetime "ends_at"
-    t.text     "schedule"
+    t.string  "type"
+    t.string  "name"
+    t.date    "start_day",  null: false
+    t.date    "end_day",    null: false
+    t.integer "start_time", null: false
+    t.integer "duration"
+    t.text    "schedule"
   end
 
   add_index "event_groups", ["type"], name: "index_event_groups_on_type", using: :btree

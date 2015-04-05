@@ -8,6 +8,17 @@ class Users::Schools::CoursesController < ApplicationController
   end
 
   def show
+    cal_start = Time.zone.now.beginning_of_month
+    cal_end   = Time.zone.now.end_of_month
+    events = @course.events.between(cal_start, cal_end)
+    item_hashes = events.map do |event|
+      {
+        starts_at: event.starts_at,
+        ends_at: event.ends_at,
+        options: {title: event.event_group.name, event: event}
+      }
+    end
+    @calendar = Carendar::Calendar.new(cal_start, cal_end, item_hashes)
   end
 
   def new

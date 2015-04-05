@@ -17,29 +17,31 @@
 @import 'carendar'
 
 .school-calendar
-  +carendar(500px, 60px, 5)
-  .day
-    border-left: 1px solid #EEE
-    border-top: 1px solid #EEE
-
-    > div
-      background-color: #EEE
-      text-align: center
-      font-size: 10pt
-      color: #999
+  +carendar(33px*24, 60px, 5)
+  height: 400px
+  overflow-y: scroll
+  font-size: 10pt
+  &.week
+    .day
+      .items
+        border-left: 1px solid #EEE
+        background: image-url('week-hour-mark.gif') repeat
 
   .item
-    border: 1px solid #DDD
     background-color: #EEE
     font-size: 8pt
     z-index: 5
     &:hover
       z-index: 10
-
+      box-shadow: 3px 3px 5px #AAA
     &.important
       background-color: #FEE
 
-
+  &.month
+    .day
+      border: 1px solid #AAA
+      border-width: 0 0 1px 1px
+      
   &.month .day .items .item
     &:hover
       position: absolute

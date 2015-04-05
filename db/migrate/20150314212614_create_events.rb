@@ -6,10 +6,12 @@ class CreateEvents < ActiveRecord::Migration
     end
 
     create_table :event_groups, id: :uuid do |t|
-      t.string :type, index: true
-      t.string :name
-      t.datetime :starts_at, null: false
-      t.datetime :ends_at
+      t.string  :type, index: true
+      t.string  :name
+      t.date    :start_day, null: false
+      t.date    :end_day, null: false
+      t.integer :start_time, null: false
+      t.integer :duration
       t.text :schedule
     end
 

@@ -1,0 +1,8 @@
+%ul.breadcrumbs
+  %li
+    = owned_item_link(@school)
+  %li
+    = owned_item_link(@course)
+  %li.current
+    = l(@event.starts_at.to_date)
+%h1 #{@event.name} H18N am #{l(@event.starts_at)}

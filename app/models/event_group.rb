@@ -4,13 +4,14 @@ class EventGroup < ActiveRecord::Base
   has_many :relationships
   has_many :events, dependent: :destroy
   has_and_belongs_to_many :dances
-  validates :starts_at, presence: true
+  validates :start_day, :start_time, presence: true
 
   RECURRING_SCHEDULE_RULES = [:weekly, :monthly]
   SCHEDULE_RULES = [:none] + RECURRING_SCHEDULE_RULES
   serialize :schedule, Hash
   attr_accessor :schedule_rule, :schedule_rule_weekly_interval, :schedule_rule_weekly,
-    :schedule_rule_monthly, :schedule_rule_monthly_mode, :recurrence_type, :duration, :start_time, :start_date
+    :schedule_rule_monthly, :schedule_rule_monthly_mode, :recurrence_type,
+    :duration
 
   def add_owner!(user)
     Relationships::OwnsEventGroup.create!(event_group: self, user: user)
@@ -32,13 +33,11 @@ class EventGroup < ActiveRecord::Base
   def generate_schedule
     return if schedule_rule.nil?
 
-    schedule_day = schedule.starts_at.to_date if has_schedule?
-    schedule_day ||= starts_at.beginning_of_day
-    new_schedule = Schedule.new(starts_at.beginning_of_day)
+    new_schedule = Schedule.new(start_day + start_time.minutes)
     case self.schedule_rule.to_sym
     when :none
       rule = nil
-      new_schedule.add_recurrence_time starts_at
+      new_schedule.add_recurrence_time start_time
     when :weekly
       self.schedule_rule_weekly_interval = 1 if self.schedule_rule_weekly_interval.blank?
       rule = Rule.weekly(self.schedule_rule_weekly_interval.to_i, :monday)
@@ -64,7 +63,7 @@ class EventGroup < ActiveRecord::Base
   end
 
   def occurrences
-    schedule.occurrences_between(starts_at, ends_at)
+    schedule.occurrences_between(start_day, end_day)
   end
 
   def schedule
@@ -96,8 +95,8 @@ class EventGroup < ActiveRecord::Base
         self.schedule_rule_monthly_mode = :day_of_month_reverse
       else
         if rule.to_hash[:validations][:day_of_week].present?
-          wday = rule.to_hash[:validations][:day_of_week][starts_at.wday]
-          if  wday == [(starts_at.day / 7).to_i + 1]
+          wday = rule.to_hash[:validations][:day_of_week][starts_day.wday]
+          if  wday == [(starts_day.day / 7).to_i + 1]
             self.schedule_rule_monthly_mode = :weekday
           else
             self.schedule_rule_monthly_mode = :weekday_reverse

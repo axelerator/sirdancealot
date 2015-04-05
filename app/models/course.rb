@@ -7,6 +7,13 @@ class Course < EventGroup
     end
   end
 
+  def add_participants(participant)
+    participants = Array.wrap(participant)
+    participants.each do |p|
+      Relationships::Participant.create!(user: p, event_group: self)
+    end
+  end
+
   def school
     Relationships::CourseGivenBy.where(event_group_id: self.id).first.try(:host)
   end

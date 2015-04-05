@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   resource :user do
     resources :schools, controller: 'users/schools' do
       resources :courses, controller: 'users/schools/courses' do
+        resources :events, controller: 'users/schools/courses/events' do
+        end
 
       end
     end

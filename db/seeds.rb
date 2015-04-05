@@ -66,23 +66,34 @@ friedensalle = salsahh.create_place(name: 'Großer Raum', description: 'Friedens
 assert friedensalle.persisted?
 
 courses_src = [
-  {name: 'NY F2', start_time: '19:00', duration: '60', day: 1},
-  {name: 'NY F1', start_time: '20:00', duration: '60', day: 1},
-  {name: 'rueda', start_time: '20:00', duration: '60', day: 2}
+  {name: 'foo', start_time: 0, duration: '60', day: 3},
+  {name: 'Kinderturnen', start_time: 9, duration: '60', day: 3},
+  {name: 'NY F2', start_time: 19, duration: '60', day: 1},
+  {name: 'Cubana Anfänger', start_time: 19, duration: '60', day: 1},
+  {name: 'NY F1', start_time: 22, duration: '60', day: 1},
+  {name: 'rueda', start_time: 21, duration: '60', day: 2}
 ]
 
 courses = courses_src.map do |course_src|
   course_params = {
     "name"=> course_src[:name],
-    "start_time"=>"19:00",
-    "duration"=>"60",
-    #"start_date"=>"#{courese_src + 2}.04.15",
+    "duration"=> 60,
     "schedule_rule_weekly_interval"=>"1",
     "schedule_rule"=>"weekly",
-    "schedule_rule_weekly"=>["1"],
-    "starts_at"=>  DateTime.strptime("#{course_src[:day]}.3.15##{course_src[:start_time]}", "%d.%m.%y#%k:%M")
+    "schedule_rule_weekly"=>[course_src[:day]],
+    "start_day" =>  (Time.zone.now.beginning_of_week + course_src[:day].days - 1.day).to_date,
+    "start_time" => course_src[:start_time] * 60
   }
   course = salsahh.create_course(course_params, friedensalle )
   assert course.persisted?
   course
 end
+
+ny_f1 = Course.find_by(name: 'NY F1')
+
+dancer_emails = %w{yve@example.org axel@example.org gregor@example.org}
+dancers = dancer_emails.map do |email|
+  FactoryGirl.create(:user, email: email, password: '1qay2wsx')
+end
+
+ny_f1.add_participant(dancers)

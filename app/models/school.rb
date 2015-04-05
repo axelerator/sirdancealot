@@ -1,7 +1,7 @@
 class School < Institution
   def courses
     hosted_event_groups_rel
-      .where(type: Course.name)
+      .where(type: Relationships::CourseGivenBy.name)
       .map(&:event_group)
   end
 
@@ -23,7 +23,7 @@ class School < Institution
 
   def create_course(params, place)
     course = Course.new(params)
-    course.ends_at = DateTime.now.end_of_year
+    course.end_day = DateTime.now.end_of_year
     course.transaction do
       course.generate_schedule
       if course.save
@@ -31,7 +31,7 @@ class School < Institution
         course.occurrences.each do |occurrence|
           lesson = Lesson.create!(event_group: course,
                         starts_at: occurrence.start_time,
-                        ends_at: occurrence.end_time,
+                        ends_at: occurrence.start_time + course.duration.minutes,
                         place: place)
           lesson.add_host!(self)
         end

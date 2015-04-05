@@ -1,5 +1,11 @@
+%ul.breadcrumbs
+  %li.current
+    = owned_item_link(@school)
 %h1=@school.name
 
 = link_to 'H18N edit', edit_user_school_path(@school)
-= carendar @calendar, class: 'school-calendar week' do |event|
-  .title= event[:title]
+.row
+  .columns.large-offset-1.large-8(style="border: 1px solid red")
+    = carendar @calendar, class: 'school-calendar week' do |event|
+      .title
+        = owned_item_link(event[:event])
