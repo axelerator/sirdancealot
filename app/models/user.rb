@@ -8,6 +8,10 @@ class User < ActiveRecord::Base
 
   has_many :relationships, inverse_of: :user
 
+  def display_name
+    email
+  end
+
   def ownerships
     relationships.ownerships
   end

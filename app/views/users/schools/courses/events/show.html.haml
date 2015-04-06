@@ -6,3 +6,13 @@
   %li.current
     = l(@event.starts_at.to_date)
 %h1 #{@event.name} H18N am #{l(@event.starts_at)}
+
+%h2 H18N Kursteilnehmer
+%ul
+  - @participants.each do |participant|
+    %li= link_to participant.display_name, toggle_attendance_user_school_course_event_path(user_id: participant.id), method: :patch
+
+%h2 H18N Anwesende
+%ul
+  - @attendees.each do |participant|
+    %li= link_to participant.display_name, toggle_attendance_user_school_course_event_path(user_id: participant.id), method: :patch

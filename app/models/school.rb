@@ -1,4 +1,11 @@
 class School < Institution
+  def add_teachers!(teacher)
+    teachers = Array.wrap(teacher)
+    teachers.each do |t|
+      Relationships::TeachesAt.create!(user: t, institution: self)
+    end
+  end
+
   def courses
     hosted_event_groups_rel
       .where(type: Relationships::CourseGivenBy.name)
@@ -9,6 +16,18 @@ class School < Institution
     hosted_events_rel(start_day, end_day)
       .where('events.type = ?', Lesson.name)
       .map(&:event)
+  end
+
+  def teachers
+    Relationships::TeachesAt
+      .where(institution: self)
+  end
+
+  def members
+    Relationships::MemberAt
+      .where(institution: self)
+      .includes(:user)
+      .map(&:user)
   end
 
   def create_place(params)

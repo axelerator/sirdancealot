@@ -2,10 +2,23 @@ class Users::Schools::Courses::EventsController < ApplicationController
   before_filter :require_login
   before_action :load_school
   before_action :load_course
-  before_action :load_event, only: [:show, :edit, :update]
+  before_action :load_event, only: [:show, :edit, :update, :toggle_attendance]
 
   def show
+    @participants = @event.event_group.participants
+    @attendees = @event.attendees
+    @participants -= @attendees
+  end
 
+  def toggle_attendance
+    user = User.find(params[:user_id])
+    attendance = Relationships::Attended.find_by(event: @event, user: user)
+    if attendance
+      attendance.destroy
+    else
+      Relationships::Attended.create!(event: @event, user: user)
+    end
+    redirect_to action: :show
   end
 
   private

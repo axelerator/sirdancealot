@@ -19,6 +19,14 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def attendees
+    User.joins(:relationships)
+        .where(relationships: {
+          type: Relationships::Attended.name,
+          event_id: self.id
+        })
+  end
+
   def name
     event_group.name
   end

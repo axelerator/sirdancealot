@@ -57,10 +57,13 @@ DatabaseCleaner.clean_with :truncation
 end
 
 rene = FactoryGirl.create(:user, email: 'rene@example.org', password: '1qay2wsx')
+jojo = FactoryGirl.create(:user, email: 'jojo@example.org', password: '1qay2wsx')
+alex = FactoryGirl.create(:user, email: 'alex@example.org', password: '1qay2wsx')
 martina = FactoryGirl.create(:user, email: 'martina@example.org', password: '1qay2wsx')
 
 salsahh = rene.create_school(name: 'SalsaHH')
 assert salsahh.persisted?
+salsahh.add_teachers!([rene, jojo, alex])
 
 friedensalle = salsahh.create_place(name: 'Großer Raum', description: 'Friedensalle 43')
 assert friedensalle.persisted?
@@ -96,4 +99,4 @@ dancers = dancer_emails.map do |email|
   FactoryGirl.create(:user, email: email, password: '1qay2wsx')
 end
 
-ny_f1.add_participant(dancers)
+ny_f1.add_participants!(dancers)

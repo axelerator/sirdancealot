@@ -21,6 +21,22 @@ class EventGroup < ActiveRecord::Base
     Relationships::CourseGivenBy.create!(event: self, host: institution)
   end
 
+  def add_participants!(participant)
+    participants = Array.wrap(participant)
+    participants.each do |p|
+      Relationships::Participant.create!(user: p, event_group: self)
+    end
+  end
+
+  def participants
+    User
+      .joins(:relationships)
+      .where(relationships: {
+        type: Relationships::Participant.name,
+        event_group_id: self.id
+      })
+  end
+
   def schedule=(new_schedule)
     write_attribute(:schedule, new_schedule.to_hash)
     explode_schedule

@@ -6,7 +6,12 @@
 %h1= @course.name
 
 .row
-  .columns.large-offset-1.large-8(style="border: 1px solid red")
+  .columns.large-8(style="border: 1px solid red")
     = carendar @calendar, class: 'school-calendar month' do |event|
       .title
         = owned_item_link(event[:event])
+  .columns.large-4(style="border: 1px solid red")
+    %h2 H18N Kursteilnehmer
+    %ul
+      - @course.participants.each do |participant|
+        %li= participant.display_name

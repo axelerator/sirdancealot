@@ -5,7 +5,23 @@
 
 = link_to 'H18N edit', edit_user_school_path(@school)
 .row
-  .columns.large-offset-1.large-8(style="border: 1px solid red")
+  .columns.large-6
+    %h3 H18N Kurse
+    - @school.courses.each do |course|
+      .row
+        = owned_item_link(course)
+  .columns.large-6
     = carendar @calendar, class: 'school-calendar week' do |event|
       .title
         = owned_item_link(event[:event])
+.row
+  .columns.large-3
+    %h3 H18N Lehrer
+    - @school.teachers.each do |teaching|
+      .row
+        = teaching.user.display_name
+  .columns.large-3
+    %h3 H18N Schüler
+    - @school.members.each do |member|
+      .row
+        = member.display_name

@@ -7,10 +7,10 @@ class Course < EventGroup
     end
   end
 
-  def add_participants(participant)
-    participants = Array.wrap(participant)
-    participants.each do |p|
-      Relationships::Participant.create!(user: p, event_group: self)
+  def add_participants!(participant)
+    super
+    Array.wrap(participant).each do |p|
+      Relationships::MemberAt.create!(user: p, institution: school)
     end
   end
 

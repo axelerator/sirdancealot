@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     resources :schools, controller: 'users/schools' do
       resources :courses, controller: 'users/schools/courses' do
         resources :events, controller: 'users/schools/courses/events' do
+          member do
+            patch :toggle_attendance
+          end
         end
 
       end
