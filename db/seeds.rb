@@ -93,6 +93,7 @@ courses = courses_src.map do |course_src|
 end
 
 ny_f1 = Course.find_by(name: 'NY F1')
+ny_f1.add_teachers!([rene, jojo])
 
 dancer_emails = %w{yve@example.org axel@example.org gregor@example.org}
 dancers = dancer_emails.map do |email|

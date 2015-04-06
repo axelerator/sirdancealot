@@ -11,6 +11,10 @@
       .title
         = owned_item_link(event[:event])
   .columns.large-4(style="border: 1px solid red")
+    %h2 H18N Trainer
+    %ul
+      - @course.teachers.each do |teacher|
+        %li= teacher.display_name
     %h2 H18N Kursteilnehmer
     %ul
       - @course.participants.each do |participant|

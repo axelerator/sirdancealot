@@ -7,6 +7,27 @@ class Course < EventGroup
     end
   end
 
+  def add_teachers!(teacher)
+    teachers = Array.wrap(teacher)
+    self.transaction do
+      teachers.each do |t|
+        Relationships::InstructsCourse.create!(event_group: self, user: t)
+      end
+      schools.each do |school|
+        school.add_teachers!(teachers)
+      end
+    end
+  end
+
+  def teachers
+    User
+      .joins(:relationships)
+      .where(relationships: {
+              type: Relationships::InstructsCourse.name,
+              event_group: self
+      })
+  end
+
   def add_participants!(participant)
     super
     Array.wrap(participant).each do |p|
@@ -14,8 +35,15 @@ class Course < EventGroup
     end
   end
 
+  def schools
+    Relationships::CourseGivenBy
+      .where(event_group_id: self.id)
+      .includes(:host)
+      .map(&:host)
+  end
+
   def school
-    Relationships::CourseGivenBy.where(event_group_id: self.id).first.try(:host)
+    schools.first
   end
 
 end
