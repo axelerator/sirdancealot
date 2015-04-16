@@ -3,6 +3,7 @@ class CreateDances < ActiveRecord::Migration
     create_table :dances, id: :uuid do |t|
       t.string :name
       t.uuid :dance_id, index: true
+      t.timestamps
     end
 
     create_table :dances_events, id: false do |t|

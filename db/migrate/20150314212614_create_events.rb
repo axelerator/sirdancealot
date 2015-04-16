@@ -29,6 +29,22 @@ class CreateEvents < ActiveRecord::Migration
       t.uuid :event_group_id, index: true, null: false
     end
 
+    create_table :conversations, id: :uuid do |t|
+      t.string :type
+      t.uuid :event_group_id
+      t.timestamps
+    end
+
+    add_foreign_key :conversations, :event_groups
+
+    create_table :messages, id: :uuid do |t|
+      t.text :body, null: false
+      t.uuid :conversation_id, null: false
+      t.timestamps
+    end
+
+    add_foreign_key :messages, :conversations
+
     add_foreign_key :events, :places
     add_foreign_key :events, :event_groups
   end

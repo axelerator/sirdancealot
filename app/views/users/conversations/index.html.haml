@@ -1,0 +1,9 @@
+%ul.breadcrumbs
+  %li
+    = link_to 'H18N Nachrichten', user_conversations_path
+%table
+  - @conversations.each do |conversation|
+    %tr
+      %td
+        = link_to user_conversation_path(conversation) do
+          = (conversation.members - [current_user]).map(&:display_name).join(', ')

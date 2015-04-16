@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150314235218) do
+ActiveRecord::Schema.define(version: 20150415161625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,9 +27,16 @@ ActiveRecord::Schema.define(version: 20150314235218) do
 
   add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
 
+  create_table "conversations", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "dances", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string "name"
-    t.uuid   "dance_id"
+    t.string   "name"
+    t.uuid     "dance_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "dances", ["dance_id"], name: "index_dances_on_dance_id", using: :btree
@@ -81,6 +88,13 @@ ActiveRecord::Schema.define(version: 20150314235218) do
 
   add_index "institutions", ["type"], name: "index_institutions_on_type", using: :btree
 
+  create_table "messages", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.text     "body",            null: false
+    t.uuid     "conversation_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "places", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string "type"
     t.string "name"
@@ -96,14 +110,18 @@ ActiveRecord::Schema.define(version: 20150314235218) do
     t.uuid    "place_id"
     t.uuid    "event_group_id"
     t.uuid    "institution_id"
+    t.uuid    "message_id"
+    t.uuid    "conversation_id"
     t.uuid    "hosted_by_institution_id"
     t.integer "state"
   end
 
+  add_index "relationships", ["conversation_id"], name: "index_relationships_on_conversation_id", using: :btree
   add_index "relationships", ["event_group_id"], name: "index_relationships_on_event_group_id", using: :btree
   add_index "relationships", ["event_id"], name: "index_relationships_on_event_id", using: :btree
   add_index "relationships", ["hosted_by_institution_id"], name: "index_relationships_on_hosted_by_institution_id", using: :btree
   add_index "relationships", ["institution_id"], name: "index_relationships_on_institution_id", using: :btree
+  add_index "relationships", ["message_id"], name: "index_relationships_on_message_id", using: :btree
   add_index "relationships", ["place_id"], name: "index_relationships_on_place_id", using: :btree
   add_index "relationships", ["type"], name: "index_relationships_on_type", using: :btree
   add_index "relationships", ["user_id"], name: "index_relationships_on_user_id", using: :btree
@@ -131,10 +149,13 @@ ActiveRecord::Schema.define(version: 20150314235218) do
 
   add_foreign_key "events", "event_groups"
   add_foreign_key "events", "places"
+  add_foreign_key "messages", "conversations"
+  add_foreign_key "relationships", "conversations"
   add_foreign_key "relationships", "event_groups"
   add_foreign_key "relationships", "events"
   add_foreign_key "relationships", "institutions"
   add_foreign_key "relationships", "institutions", column: "hosted_by_institution_id"
+  add_foreign_key "relationships", "messages"
   add_foreign_key "relationships", "places"
   add_foreign_key "relationships", "users"
 end

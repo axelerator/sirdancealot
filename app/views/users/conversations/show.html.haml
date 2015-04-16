@@ -1,0 +1,13 @@
+%ul.breadcrumbs
+  %li
+    = link_to 'H18N Nachrichten', user_conversations_path
+  %li.current
+    = link_to @conversation.display_name, user_conversation_path(@conversation)
+%ul
+  - @messages.each do |message|
+    %li
+      .author= message.author.display_name
+      .body= message.body
+
+
+

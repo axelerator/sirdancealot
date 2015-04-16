@@ -15,6 +15,7 @@ class EventGroup < ActiveRecord::Base
 
   def add_owner!(user)
     Relationships::OwnsEventGroup.create!(event_group: self, user: user)
+    # TODO: add owner to all dd
   end
 
   def add_host!(institution)
@@ -26,6 +27,14 @@ class EventGroup < ActiveRecord::Base
     participants.each do |p|
       Relationships::Participant.create!(user: p, event_group: self)
     end
+  end
+
+  def conversation
+    Conversation.where(event_group_id: self.id)
+  end
+
+  def send_message!(body, from_user)
+    conversation =
   end
 
   def participants
