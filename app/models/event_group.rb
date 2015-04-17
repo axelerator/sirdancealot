@@ -24,8 +24,13 @@ class EventGroup < ActiveRecord::Base
 
   def add_participants!(participant)
     participants = Array.wrap(participant)
+    events = self.events.upcoming
     participants.each do |p|
       Relationships::Participant.create!(user: p, event_group: self)
+    end
+
+    events.each do |event|
+      event.invite!(participants)
     end
   end
 

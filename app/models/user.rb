@@ -6,10 +6,20 @@ class User < ActiveRecord::Base
   has_many :authentications, :dependent => :destroy
   accepts_nested_attributes_for :authentications
 
-  has_many :relationships, inverse_of: :user
+  has_many :relationships, inverse_of: :user, :dependent => :destroy
 
   def display_name
     email
+  end
+
+  def events(for_next_days = 8)
+    Event
+      .joins(:relationships)
+      .where(relationships: {
+        type: Relationships::InvitedTo,
+        user: self })
+      .by_start
+      .for_next_days(for_next_days)
   end
 
   def ownerships

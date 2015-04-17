@@ -21,7 +21,7 @@
             %li
               =link_to t('.conversations'), user_conversations_path
             %li.active
-              %a{:href => "#"}=t('global.logout')
+              = link_to t('global.logout'), logout_path, method: :post
     / Left Nav Section
     %ul.left
       %li

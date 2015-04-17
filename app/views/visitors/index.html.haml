@@ -5,11 +5,18 @@
     - current_user.owned_schools.each do |school|
       = owned_item_link(school)
       %br
+  - else
+    - current_user.events.each do |event|
+      .row
+        =l(event.starts_at)
+        = event.name
 - else
   = link_to 'Login with Facebook', auth_at_provider_path(:provider => :facebook)
   = link_to 'H18N login wiht PW', login_path
   %br
   = link_to "login as REne", user_sessions_path(login: {email: 'rene@example.org', password: '1qay2wsx'}), method: :post
+  %br
+  = link_to "login as Axel", user_sessions_path(login: {email: 'axel@example.org', password: '1qay2wsx'}), method: :post
 
 
 -#%ul
