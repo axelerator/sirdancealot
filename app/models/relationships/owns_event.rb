@@ -1,9 +1,3 @@
-class Relationships::OwnsEvent < Relationship
-  validates :user, presence: true
-  validates :event, presence: true
-
-  def owns
-    event
-  end
+class Relationships::OwnsEvent < Relationships::Ownership
 end
 

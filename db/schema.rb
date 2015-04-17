@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150415161625) do
+ActiveRecord::Schema.define(version: 20150314221316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,11 +27,6 @@ ActiveRecord::Schema.define(version: 20150415161625) do
 
   add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
 
-  create_table "conversations", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "dances", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "name"
     t.uuid     "dance_id"
@@ -41,45 +36,32 @@ ActiveRecord::Schema.define(version: 20150415161625) do
 
   add_index "dances", ["dance_id"], name: "index_dances_on_dance_id", using: :btree
 
-  create_table "dances_event_groups", id: false, force: :cascade do |t|
-    t.uuid "event_group_id", null: false
-    t.uuid "dance_id",       null: false
-  end
-
-  add_index "dances_event_groups", ["dance_id"], name: "index_dances_event_groups_on_dance_id", using: :btree
-  add_index "dances_event_groups", ["event_group_id"], name: "index_dances_event_groups_on_event_group_id", using: :btree
-
-  create_table "dances_events", id: false, force: :cascade do |t|
-    t.uuid "event_id", null: false
+  create_table "dances_groups", id: false, force: :cascade do |t|
+    t.uuid "group_id", null: false
     t.uuid "dance_id", null: false
   end
 
-  add_index "dances_events", ["dance_id"], name: "index_dances_events_on_dance_id", using: :btree
-  add_index "dances_events", ["event_id"], name: "index_dances_events_on_event_id", using: :btree
+  add_index "dances_groups", ["dance_id"], name: "index_dances_groups_on_dance_id", using: :btree
+  add_index "dances_groups", ["group_id"], name: "index_dances_groups_on_group_id", using: :btree
 
-  create_table "event_groups", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string  "type"
-    t.string  "name"
-    t.date    "start_day",  null: false
-    t.date    "end_day",    null: false
-    t.integer "start_time", null: false
-    t.integer "duration"
-    t.text    "schedule"
-  end
-
-  add_index "event_groups", ["type"], name: "index_event_groups_on_type", using: :btree
-
-  create_table "events", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+  create_table "groups", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "type"
-    t.datetime "starts_at",      null: false
-    t.datetime "ends_at",        null: false
-    t.uuid     "place_id",       null: false
-    t.uuid     "event_group_id", null: false
+    t.string   "name"
+    t.date     "start_day"
+    t.date     "end_day"
+    t.integer  "start_time"
+    t.integer  "duration"
+    t.text     "schedule"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.uuid     "place_id"
+    t.uuid     "group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "events", ["event_group_id"], name: "index_events_on_event_group_id", using: :btree
-  add_index "events", ["place_id"], name: "index_events_on_place_id", using: :btree
-  add_index "events", ["type"], name: "index_events_on_type", using: :btree
+  add_index "groups", ["place_id"], name: "index_groups_on_place_id", using: :btree
+  add_index "groups", ["type"], name: "index_groups_on_type", using: :btree
 
   create_table "institutions", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string "type", null: false
@@ -106,19 +88,15 @@ ActiveRecord::Schema.define(version: 20150415161625) do
   create_table "relationships", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string  "type"
     t.uuid    "user_id"
-    t.uuid    "event_id"
+    t.uuid    "group_id"
     t.uuid    "place_id"
-    t.uuid    "event_group_id"
     t.uuid    "institution_id"
     t.uuid    "message_id"
-    t.uuid    "conversation_id"
     t.uuid    "hosted_by_institution_id"
     t.integer "state"
   end
 
-  add_index "relationships", ["conversation_id"], name: "index_relationships_on_conversation_id", using: :btree
-  add_index "relationships", ["event_group_id"], name: "index_relationships_on_event_group_id", using: :btree
-  add_index "relationships", ["event_id"], name: "index_relationships_on_event_id", using: :btree
+  add_index "relationships", ["group_id"], name: "index_relationships_on_group_id", using: :btree
   add_index "relationships", ["hosted_by_institution_id"], name: "index_relationships_on_hosted_by_institution_id", using: :btree
   add_index "relationships", ["institution_id"], name: "index_relationships_on_institution_id", using: :btree
   add_index "relationships", ["message_id"], name: "index_relationships_on_message_id", using: :btree
@@ -147,12 +125,7 @@ ActiveRecord::Schema.define(version: 20150415161625) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
 
-  add_foreign_key "events", "event_groups"
-  add_foreign_key "events", "places"
-  add_foreign_key "messages", "conversations"
-  add_foreign_key "relationships", "conversations"
-  add_foreign_key "relationships", "event_groups"
-  add_foreign_key "relationships", "events"
+  add_foreign_key "relationships", "groups"
   add_foreign_key "relationships", "institutions"
   add_foreign_key "relationships", "institutions", column: "hosted_by_institution_id"
   add_foreign_key "relationships", "messages"

@@ -1,9 +1,7 @@
-class EventGroup < ActiveRecord::Base
+class EventGroup < Group
   include IceCube
 
-  has_many :relationships
-  has_many :events, dependent: :destroy
-  has_and_belongs_to_many :dances
+  has_many :events, dependent: :destroy, foreign_key: 'group_id'
   validates :start_day, :start_time, presence: true
 
   RECURRING_SCHEDULE_RULES = [:weekly, :monthly]
@@ -14,19 +12,19 @@ class EventGroup < ActiveRecord::Base
     :duration
 
   def add_owner!(user)
-    Relationships::OwnsEventGroup.create!(event_group: self, user: user)
+    Relationships::OwnsEventGroup.create!(group: self, user: user)
     # TODO: add owner to all dd
   end
 
   def add_host!(institution)
-    Relationships::CourseGivenBy.create!(event: self, host: institution)
+    Relationships::CourseGivenBy.create!(group: self, host: institution)
   end
 
   def add_participants!(participant)
     participants = Array.wrap(participant)
     events = self.events.upcoming
     participants.each do |p|
-      Relationships::Participant.create!(user: p, event_group: self)
+      Relationships::Participant.create!(user: p, group: self)
     end
 
     events.each do |event|
@@ -35,11 +33,11 @@ class EventGroup < ActiveRecord::Base
   end
 
   def conversation
-    Conversation.where(event_group_id: self.id)
+    Conversation.where(group_id: self.id)
   end
 
   def send_message!(body, from_user)
-    conversation =
+
   end
 
   def participants
@@ -47,7 +45,7 @@ class EventGroup < ActiveRecord::Base
       .joins(:relationships)
       .where(relationships: {
         type: Relationships::Participant.name,
-        event_group_id: self.id
+        group_id: self.id
       })
   end
 

@@ -1,5 +1,9 @@
 class Relationships::Participant < Relationship
-  validates :event_group, presence: true
+  validates :group, presence: true
+
+  def event_group
+    group
+  end
 end
 
 

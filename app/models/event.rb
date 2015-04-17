@@ -1,25 +1,22 @@
-class Event < ActiveRecord::Base
-  has_and_belongs_to_many :dances
+class Event < Group
   belongs_to :place
-  belongs_to :event_group
-  has_many :relationships, inverse_of: :event, :dependent => :destroy
 
+  belongs_to :event_group, class_name: 'EventGroup', foreign_key: 'group_id'
   validates :event_group, :place, :starts_at, :ends_at, presence: true
-
   scope :between, -> (from, to) { where('starts_at > ? and ends_at < ?', from.beginning_of_day, to.beginning_of_day)}
   scope :upcoming, -> { where('starts_at > ?', Time.zone.now)}
   scope :by_start, -> { order(:starts_at) }
   scope :for_next_days, -> (days) { where('starts_at > ? and ends_at < ?', Time.zone.local_to_utc(Time.now), Time.zone.local_to_utc(Time.now) + days.days)}
 
   def add_host!(institution)
-    Relationships::HostedBy.create!(event: self, host: institution)
+    Relationships::HostedBy.create!(group: self, host: institution)
     add_owners!(institution.owners)
   end
 
   def add_owners!(owner)
     owners = Array.wrap(owner)
-    owners.each do |owner|
-      Relationships::OwnsEvent.create!(event: self, user: owner)
+    owners.each do |o|
+      Relationships::OwnsEvent.create!(group: self, user: o)
     end
   end
 
@@ -34,7 +31,7 @@ class Event < ActiveRecord::Base
     User.joins(:relationships)
         .where(relationships: {
           type: Relationships::Attended.name,
-          event_id: self.id
+          group_id: self.id
         })
   end
 

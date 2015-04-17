@@ -10,16 +10,16 @@ class Institution < ActiveRecord::Base
   def hosted_events_rel(start_day, end_day)
     starts_at = start_day.beginning_of_day
     ends_at = end_day.end_of_day
-    Relationships::HostedBy
-      .joins(:event)
+    Group.joins(:relationships)
+      .where(relationships: {
+        type: Relationships::HostedBy.name,
+        group: self })
       .where('starts_at > ?', starts_at)
       .where('ends_at < ?', ends_at)
-      .where(host: self)
   end
 
   def hosted_events(start_day = Date.today, end_day = (Time.now + 1.year).to_date)
     hosted_events_rel(start_day, end_day)
-      .map(&:event)
   end
 
   def owners

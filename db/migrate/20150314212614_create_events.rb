@@ -5,14 +5,24 @@ class CreateEvents < ActiveRecord::Migration
       t.string :name, null: false
     end
 
-    create_table :event_groups, id: :uuid do |t|
+    create_table :groups, id: :uuid do |t|
       t.string  :type, index: true
+
+      #event_group
       t.string  :name
-      t.date    :start_day, null: false
-      t.date    :end_day, null: false
-      t.integer :start_time, null: false
+      t.date    :start_day
+      t.date    :end_day
+      t.integer :start_time
       t.integer :duration
       t.text :schedule
+
+      #event
+      t.datetime :starts_at
+      t.datetime :ends_at
+      t.uuid :place_id, index: true
+      t.uuid :group_id
+
+      t.timestamps
     end
 
     create_table :places, id: :uuid do |t|
@@ -21,21 +31,6 @@ class CreateEvents < ActiveRecord::Migration
       t.string :description
     end
 
-    create_table :events, id: :uuid do |t|
-      t.string :type, index: true
-      t.datetime :starts_at, null: false
-      t.datetime :ends_at, null: false
-      t.uuid :place_id, index: true, null: false
-      t.uuid :event_group_id, index: true, null: false
-    end
-
-    create_table :conversations, id: :uuid do |t|
-      t.string :type
-      t.uuid :event_group_id
-      t.timestamps
-    end
-
-    add_foreign_key :conversations, :event_groups
 
     create_table :messages, id: :uuid do |t|
       t.text :body, null: false
@@ -43,9 +38,5 @@ class CreateEvents < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_foreign_key :messages, :conversations
-
-    add_foreign_key :events, :places
-    add_foreign_key :events, :event_groups
   end
 end

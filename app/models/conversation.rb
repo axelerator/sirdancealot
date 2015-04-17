@@ -1,13 +1,11 @@
-class Conversation < ActiveRecord::Base
-  has_many :messages
-  has_many :relationships, dependent: :destroy
+class Conversation < Group
 
   scope :direct_conversations, -> do
     Conversation
       .joins(:relationships)
       .where(relationships: {type: Relationships::TalksIn.name})
-      .group('conversations.id')
-      .having('count(conversations.id) = 2')
+      .group('groups.id')
+      .having('count(groups.id) = 2')
   end
 
   def add_talkers!(talker)
