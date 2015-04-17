@@ -89,6 +89,7 @@ courses = courses_src.map do |course_src|
   }
   course = salsahh.create_course(course_params, friedensalle )
   assert course.persisted?
+  assert School.find(salsahh).courses.count > 0
   course
 end
 

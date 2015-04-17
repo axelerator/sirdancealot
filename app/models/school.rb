@@ -2,14 +2,15 @@ class School < Institution
   def add_teachers!(teacher)
     teachers = Array.wrap(teacher)
     teachers.each do |t|
-      Relationships::TeachesAt.create!(user: t, institution: self)
+      Relationships::TeachesAt.create!(user: t, group: self)
     end
   end
 
   def courses
-    hosted_event_groups_rel
-      .where(type: Relationships::CourseGivenBy.name)
-      .map(&:event_group)
+    Course.joins(:relationships)
+      .where(relationships: {
+        type: Relationships::CourseGivenBy.name,
+        other_group: self})
   end
 
   def lessons(start_day = Date.today, end_day = (Time.now + 1.year).to_date)
@@ -20,14 +21,14 @@ class School < Institution
 
   def teachers
     Relationships::TeachesAt
-      .where(institution: self)
+      .where(group: self)
   end
 
   def members
-    Relationships::MemberAt
-      .where(institution: self)
-      .includes(:user)
-      .map(&:user)
+    User.joins(:relationships)
+        .where(relationships: {
+               type: Relationships::MemberAt,
+               group: self})
   end
 
   def create_place(params)

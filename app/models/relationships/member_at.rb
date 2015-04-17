@@ -1,5 +1,5 @@
 class Relationships::MemberAt < Relationship
-  validates :institution, presence: true
+  validates :group, presence: true
 end
 
 

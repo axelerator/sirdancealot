@@ -1,10 +1,5 @@
 class CreateEvents < ActiveRecord::Migration
   def change
-    create_table :institutions, id: :uuid do |t|
-      t.string :type, null: false, index: true
-      t.string :name, null: false
-    end
-
     create_table :groups, id: :uuid do |t|
       t.string  :type, index: true
 
@@ -29,6 +24,7 @@ class CreateEvents < ActiveRecord::Migration
       t.string :type, index: true
       t.string :name
       t.string :description
+      t.timestamps
     end
 
 

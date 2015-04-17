@@ -14,7 +14,7 @@ class Users::SchoolsController < ApplicationController
       {
         starts_at: event.starts_at,
         ends_at: event.ends_at,
-        options: {title: event.event_group.name, event: event}
+        options: {title: event.name, event: event}
       }
     end
     @calendar = Carendar::Calendar.new(cal_start, cal_end, item_hashes)

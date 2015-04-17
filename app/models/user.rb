@@ -27,10 +27,10 @@ class User < ActiveRecord::Base
   end
 
   def owned_schools
-    ownerships
-      .joins(:institution)
-      .where('institutions.type = ?', School.name)
-      .map(&:owns)
+    School.joins(:relationships)
+      .where(relationships: {
+              type: Relationships::OwnsInstitution,
+              user: self})
   end
 
   def owned_courses

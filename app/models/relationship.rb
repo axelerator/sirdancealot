@@ -1,7 +1,7 @@
 class Relationship < ActiveRecord::Base
   belongs_to :user, inverse_of: :relationships
   belongs_to :group
-  belongs_to :institution
+  belongs_to :other_group, class_name: 'Group' # for inter-group relationships
   belongs_to :message
 
 
