@@ -1,9 +1,17 @@
 %ul.breadcrumbs
   %li
     = link_to 'H18N Nachrichten', user_conversations_path
-%table
-  - @conversations.each do |conversation|
-    %tr
-      %td
-        = link_to user_conversation_path(conversation) do
-          = (conversation.members - [current_user]).map(&:display_name).join(', ')
+.conversations
+  .conversation-list
+    - @conversations.each do |conversation|
+      .conversation-abbr
+        .sender-image
+          = image_tag('axel.jpg')
+        .content
+          .timestamp= time_ago_in_words(conversation.last_action_at)
+          .senders
+            = link_to user_conversation_path(conversation) do
+              = truncate((conversation.members - [current_user]).map(&:display_name).join(', '))
+          .teaser
+            = link_to user_conversation_path(conversation) do
+              Lorem ldskasd ...

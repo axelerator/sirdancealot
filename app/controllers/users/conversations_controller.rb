@@ -1,12 +1,20 @@
 class Users::ConversationsController < ApplicationController
+  before_action :require_login
+  before_action :load_conversations
 
   def index
-    @conversations = current_user.conversations
+    redirect_to user_conversation_path(@conversations.first) if @conversations.any?
   end
 
   def show
-    @conversation = current_user.conversations.find(params[:id])
+    @conversation = @conversations.find(params[:id])
     @messages = @conversation.messages
+  end
+
+  private
+
+  def load_conversations
+    @conversations = current_user.conversations
   end
 
 end

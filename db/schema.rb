@@ -64,8 +64,9 @@ ActiveRecord::Schema.define(version: 20150314221316) do
   add_index "groups", ["type"], name: "index_groups_on_type", using: :btree
 
   create_table "messages", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.text     "body",            null: false
-    t.uuid     "conversation_id", null: false
+    t.text     "body",       null: false
+    t.uuid     "user_id",    null: false
+    t.uuid     "group_id",   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

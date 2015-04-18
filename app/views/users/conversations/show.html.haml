@@ -3,11 +3,30 @@
     = link_to 'H18N Nachrichten', user_conversations_path
   %li.current
     = link_to @conversation.display_name, user_conversation_path(@conversation)
-%ul
-  - @messages.each do |message|
-    %li
-      .author= message.author.display_name
-      .body= message.body
+.conversations
+  .conversation-list
+    - @conversations.each do |conversation|
+      .conversation-abbr{class: conversation == @conversation ? 'current' : nil}
+        .sender-image
+          = image_tag('axel.jpg')
+        .content
+          .timestamp= time_ago_in_words(conversation.last_action_at)
+          .senders
+            = link_to user_conversation_path(conversation) do
+              = truncate((conversation.members - [current_user]).map(&:display_name).join(', '))
+          .teaser
+            = link_to user_conversation_path(conversation) do
+              Lorem ldskasd ...
+  .current-conversation
+    - @messages.each do |message|
+      .message
+        .author-image
+          = image_tag('axel.jpg')
+        .body
+          .meta
+            .timestamp= time_ago_in_words(message.created_at)
+            .author-name= message.author.display_name
+          %p= message.body
 
 
 

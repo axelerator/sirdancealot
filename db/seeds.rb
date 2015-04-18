@@ -61,6 +61,16 @@ jojo = FactoryGirl.create(:user, email: 'jojo@example.org', password: '1qay2wsx'
 alex = FactoryGirl.create(:user, email: 'alex@example.org', password: '1qay2wsx')
 martina = FactoryGirl.create(:user, email: 'martina@example.org', password: '1qay2wsx')
 
+others = [jojo, alex, martina]
+30.times do |i|
+  message = if i.odd?
+              rene.send_message!(Faker::Lorem.paragraph(2), others.sample)
+            else
+              others.sample.send_message!(Faker::Lorem.paragraph(2), rene)
+            end
+  message.update_column(:created_at, message.created_at - i.minutes)
+end
+
 salsahh = rene.create_school(name: 'SalsaHH')
 assert salsahh.persisted?
 salsahh.add_teachers!([rene, jojo, alex])

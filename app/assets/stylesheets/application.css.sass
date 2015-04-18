@@ -11,10 +11,19 @@
  * file per style scope.
  *
  *= require select2
- *= require_tree .
  *= require_self
  */
+@import 'foundation_and_overrides'
 @import 'carendar'
+
+$color-muted: #CCC
+
+$color-separator: #CCC
+$color-higlighted-list-bg: #EEE
+@import 'conversations'
+
+body, *
+  font-size: 10pt
 
 .school-calendar
   +carendar(33px*24, 60px, 5)

@@ -1,25 +1,35 @@
 class Conversation < Group
 
-  scope :direct_conversations, -> do
-    Conversation
-      .joins(:relationships)
-      .where(relationships: {type: Relationships::TalksIn.name})
-      .group('groups.id')
-      .having('count(groups.id) = 2')
+  def self.between_direct(u1, u2)
+    u1_ids, u2_ids = [u1, u2].map do |user|
+      Conversation
+        .joins(:relationships)
+        .where(relationships: {
+          type: Relationships::TalksIn,
+          user: user
+        }).pluck(:id)
+    end
+    Conversation.where(id: u1_ids & u2_ids).first
+
   end
 
-  def add_talkers!(talker)
-    talkers = Array.wrap(talker)
-    talkers.each do |t|
-      Relationships::TalksIn.create!(user: t, conversation: self)
+  def self.create_between!(u1, u2)
+    conversation = Conversation.new
+    self.transaction do
+      conversation.save!
+      Relationships::TalksIn.create!(user: u1, group: conversation)
+      Relationships::TalksIn.create!(user: u2, group: conversation)
     end
+    conversation
   end
 
   def members
-    @members ||= Relationships::TalksIn
-      .where(conversation: self)
-      .includes(:user)
-      .map(&:user)
+    User.joins(:relationships)
+      .where(relationships: {
+          type: Relationships::TalksIn,
+          group: self
+      })
+      .distinct
   end
 
   def display_name

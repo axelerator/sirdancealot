@@ -1,0 +1,56 @@
+.conversations
+  +grid-row()
+  .conversation-list
+    +grid-column(3, $collapse: true)
+
+    border: 1px solid $color-separator
+    border-width:  0 1px 0 0
+
+  .conversation-abbr
+    +grid-row()
+
+    border: 1px solid $color-separator
+    border-width: 1px 0 0 0
+    cursor: pointer
+
+    &.current
+      background-color: $color-higlighted-list-bg
+    a
+      color: black
+
+    .sender-image
+      +grid-column(3, $collapse: true)
+    .content
+      +grid-column(9)
+      .sender
+        font-size: 0.7rem
+        font-size: bold
+
+      .timestamp
+        float: right
+        font-size: 0.7rem
+        color: $color-muted
+      .teaser
+        color: $color-muted
+
+  .current-conversation
+    +grid-column(8, $collapse: true)
+    .message
+      +grid-row()
+
+      .author-image
+        +grid-column(1, $collapse: true)
+        img
+          width: 30px
+      .body
+        +grid-column(11, $collapse: true)
+        .meta
+          +grid-row()
+          .timestamp
+            float: right
+            color: $color-muted
+          .author-name
+            float: left
+
+
+

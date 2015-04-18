@@ -46,30 +46,31 @@ class User < ActiveRecord::Base
     school
   end
 
-  def conversations_rel
+  def conversations
     Conversation
+      .select('groups.*, max(messages.created_at) as last_action_at')
+      .joins(:messages)
       .joins(:relationships)
       .where(relationships: {
-        user: self,
-        type: Relationships::TalksIn.name
-      })
+          type: Relationships::TalksIn,
+          user: self})
+      .group('groups.id')
+      .order('last_action_at')
+      .having('count(messages.id) > 0')
+      .distinct
   end
 
-  def conversations
-     conversations_rel
+  def conversations_with(user)
+    Conversation.between_direct(self, user)
   end
 
   def send_message!(body, user)
-    my_ids = conversations_rel.distinct('conversations.id')
-    his_ids = user.conversations_rel.distinct('conversations.id')
-    conversation = Conversation.where(id: my_ids & his_ids).first
+    conversation = conversations_with(user)
     Conversation.transaction do
       if conversation.nil?
-        conversation = Conversation.create!
-        conversation.add_talkers!([self, user])
+        conversation = Conversation.create_between!(self, user)
       end
-      message = conversation.messages.create!(body: body)
-      Relationships::OwnsMessage.create!(message: message, user: self)
+      message = conversation.messages.create!(body: body, user: self, group: conversation)
       message
     end
 

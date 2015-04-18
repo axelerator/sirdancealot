@@ -49,7 +49,7 @@ class School < Institution
       if course.save
         course.add_host!(self)
         course.occurrences.each do |occurrence|
-          lesson = Lesson.create!(event_group: course,
+          lesson = Lesson.create!(group: course,
                         starts_at: occurrence.start_time,
                         ends_at: occurrence.start_time + course.duration.minutes,
                         place: place)

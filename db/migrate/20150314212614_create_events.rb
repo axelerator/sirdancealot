@@ -30,7 +30,8 @@ class CreateEvents < ActiveRecord::Migration
 
     create_table :messages, id: :uuid do |t|
       t.text :body, null: false
-      t.uuid :conversation_id, null: false
+      t.uuid :user_id, null: false
+      t.uuid :group_id, null: false
       t.timestamps
     end
 
