@@ -12,11 +12,11 @@ class Users::Schools::Courses::EventsController < ApplicationController
 
   def toggle_attendance
     user = User.find(params[:user_id])
-    attendance = Relationships::Attended.find_by(event: @event, user: user)
+    attendance = Relationships::Attended.find_by(group: @event, user: user)
     if attendance
       attendance.destroy
     else
-      Relationships::Attended.create!(event: @event, user: user)
+      Relationships::Attended.create!(group: @event, user: user)
     end
     redirect_to action: :show
   end

@@ -5,10 +5,11 @@ class SorceryCore < ActiveRecord::Migration
       t.string :email,            :null => false
       t.string :crypted_password, :null => false
       t.string :salt,             :null => false
-
       t.timestamps
     end
 
     add_index :users, :email, unique: true
+    add_column :users, :profile_image_uid,  :string
+    add_column :users, :profile_image_name, :string
   end
 end

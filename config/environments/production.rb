@@ -76,4 +76,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # cache for dragonfly images
+  config.action_dispatch.rack_cache = true
 end

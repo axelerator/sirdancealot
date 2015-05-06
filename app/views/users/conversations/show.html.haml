@@ -21,7 +21,7 @@
     - @messages.each do |message|
       .message
         .author-image
-          = image_tag('axel.jpg')
+          = image_tag message.author.profile.url
         .body
           .meta
             .timestamp= time_ago_in_words(message.created_at)

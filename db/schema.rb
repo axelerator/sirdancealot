@@ -112,6 +112,8 @@ ActiveRecord::Schema.define(version: 20150314221316) do
     t.string   "salt",                         null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "profile_image_uid"
+    t.string   "profile_image_name"
     t.string   "remember_me_token"
     t.datetime "remember_me_token_expires_at"
   end

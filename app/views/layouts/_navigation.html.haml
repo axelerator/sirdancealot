@@ -12,6 +12,8 @@
     %ul.right
       -#%li.active
         %a{:href => "#"} Right Button Active
+      %li
+
       - if current_user
         %li.has-dropdown
           %a{:href => "#"}= current_user.email
@@ -25,4 +27,4 @@
     / Left Nav Section
     %ul.left
       %li
-        = render 'layouts/navigation_links'
+

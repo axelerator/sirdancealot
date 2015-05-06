@@ -3,7 +3,8 @@ class Users::ConversationsController < ApplicationController
   before_action :load_conversations
 
   def index
-    redirect_to user_conversation_path(@conversations.first) if @conversations.any?
+    first = @conversations.limit(1).first
+    redirect_to user_conversation_path(first) if first.present?
   end
 
   def show

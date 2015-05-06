@@ -1,0 +1,6 @@
+= simple_form_for @user do |f|
+  = f.input :email
+  - if @user.has_profile_image?
+    = image_tag @user.profile.url
+  = f.file_field :profile_image
+  = f.button :submit, 'H18N update'

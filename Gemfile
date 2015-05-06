@@ -22,6 +22,11 @@ gem 'thin'
 
 gem 'ice_cube'
 gem 'carendar', path: '../carendar'
+gem 'dragonfly'
+gem "font-awesome-rails"
+
+
+gem 'rack-cache', :require => 'rack/cache'
 
 group :development do
   gem 'better_errors'

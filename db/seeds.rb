@@ -112,3 +112,7 @@ dancers = dancer_emails.map do |email|
 end
 
 ny_f1.add_participants!(dancers)
+
+User.find_each do |user|
+  user.update_attributes(profile_image_url: 'http://lorempixel.com/100/100/people/')
+end

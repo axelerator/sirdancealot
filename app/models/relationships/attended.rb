@@ -1,5 +1,5 @@
 class Relationships::Attended < Relationship
-  validates :event, presence: true
+  validates :group, presence: true
 end
 
 

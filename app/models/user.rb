@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  extend Dragonfly::Model
+  dragonfly_accessor :profile_image
+
   authenticates_with_sorcery! do |config|
     config.authentications_class = Authentication
   end
@@ -7,6 +10,15 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :authentications
 
   has_many :relationships, inverse_of: :user, :dependent => :destroy
+
+  def has_profile_image?
+    !profile_image.nil?
+  end
+
+  def profile(size = :thumb)
+    dim = {thumb: '100x100#'}
+    profile_image.thumb(dim[size.to_sym])
+  end
 
   def display_name
     email
